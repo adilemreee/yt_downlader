@@ -41,4 +41,4 @@ def download_video():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5400, debug=True)  # Dış dünyaya açık!
+    app.run(host="0.0.0.0", port=5300, debug=True)  # Dış dünyaya açık!
