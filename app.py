@@ -6,6 +6,8 @@ temp_folder = "downloads"
 if not os.path.exists(temp_folder):
     os.makedirs(temp_folder)
 
+cookie_file = "cookies.txt"  # YouTube çerezlerini buradan okuyacağız
+
 app = Flask(__name__)
 
 
@@ -25,7 +27,8 @@ def download_video():
 
         ydl_opts = {
             'outtmpl': file_path,
-            'format': 'mp4',  # Direkt MP4 formatında indir
+            'format': 'mp4',
+            'cookiefile': cookie_file  # Çerezleri kullanarak giriş yap
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -38,4 +41,4 @@ def download_video():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5300, debug=True)
+    app.run(host="0.0.0.0", port=5400, debug=True)  # Dış dünyaya açık!
