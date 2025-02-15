@@ -1,20 +1,41 @@
-from flask import Flask, render_template, request, send_file
-from pytube import YouTube
+from flask import Flask, request, render_template, send_file
+import yt_dlp
 import os
+
+temp_folder = "downloads"
+if not os.path.exists(temp_folder):
+    os.makedirs(temp_folder)
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+
+@app.route('/')
 def index():
-    if request.method == "POST":
-        url = request.form["url"]
-        yt = YouTube(url)
-        stream = yt.streams.get_highest_resolution()
-        video_path = stream.download()
+    return render_template('index.html')
 
-        return send_file(video_path, as_attachment=True)
 
-    return render_template("index.html")
+@app.route('/download', methods=['POST'])
+def download_video():
+    url = request.form.get('url')
+    if not url:
+        return "Lütfen bir YouTube URL'si girin", 400
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    try:
+        file_path = os.path.join(temp_folder, "video.mp4")
+
+        ydl_opts = {
+            'outtmpl': file_path,
+            'format': 'mp4',  # Direkt MP4 formatında indir
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        return send_file(file_path, as_attachment=True)
+
+    except Exception as e:
+        return f"Hata oluştu: {str(e)}", 500
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5300, debug=True)

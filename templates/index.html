@@ -7,8 +7,9 @@
 </head>
 <body>
     <h1>YouTube Video İndirici</h1>
-    <form method="post">
-        <input type="text" name="url" placeholder="YouTube URL'sini girin" required>
+    <form action="/download" method="post">
+        <label for="url">YouTube URL:</label>
+        <input type="text" id="url" name="url" required>
         <button type="submit">İndir</button>
     </form>
 </body>
